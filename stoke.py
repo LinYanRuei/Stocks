@@ -49,30 +49,30 @@ def Stoke_KD_Value(name,t):
         return m
 
 #########自行查找用
-print('Type "end" or 0000 to end the program.')
-name = input('Input name: ')  #e.g. 2330 for TSMC
-while name != 'end' and name != '0000':
-    t = 0        
-    Stoke_KD_Value(name,t)   
-    name = input('Input name: ')
+# print('Type "end" or 0000 to end the program.')
+# name = input('Input name: ')  #e.g. 2330 for TSMC
+# while name != 'end' and name != '0000':
+#     t = 0        
+#     Stoke_KD_Value(name,t)   
+#     name = input('Input name: ')
 
 ########### Good Stokes 100
-# Buy = []
-# Sale = []
-# g = 0
-# t = 1
-# with open('Good stokes.csv', newline='') as csvfile:    
-#     rows = csv.reader(csvfile)
-#     for row in rows:
-#         name = row[0]
-#         g = Stoke_KD_Value(name,t)
-#         if g == 1:
-#             Buy.append(name)
-#         elif g == 2:
-#             Sale.append(name)
+Buy = []
+Sale = []
+g = 0
+t = 1
+with open('Good stokes.csv', newline='') as csvfile:    
+    rows = csv.reader(csvfile)
+    for row in rows:
+        name = row[0]
+        g = Stoke_KD_Value(name,t)
+        if g == 1:
+            Buy.append(name)
+        elif g == 2:
+            Sale.append(name)
 
-# print('Buy:', Buy)
-# print('Sale:',Sale)      
+print('Buy:', Buy)
+print('Sale:',Sale)      
 
 
 
