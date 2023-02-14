@@ -1,5 +1,5 @@
 """
-Stoke Finder
+Stock Finder
 Author Lin Yan Ruei @ CCU PHY, Taiwan
 """
 # To use this program, you must have good stoke.csv.
@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 import csv
 
 
-def Stoke_KD_Value(name, t):
+def Stock_KD_Value(name, t):
     df = yf.Ticker(f'{name}.TW').history(period='max')
     k = []
     d = []
@@ -51,27 +51,27 @@ def Stoke_KD_Value(name, t):
 
 
 type = input(
-    'Input which type you want to use, 0 for search in yourself, 1 for good stoke 100. ')
+    'Input which type you want to use, 0 for search in yourself, 1 for good stocks 100. ')
 if type == '0':
     # 自行查找用
     print('Type "end" or 0000 to end the program.')
     name = input('Input name: ')  # e.g. 2330 for TSMC
     while name != 'end' and name != '0000':
         t = 0
-        Stoke_KD_Value(name, t)
-        print(yf.Ticker(f'{name}.TW').price)
+        Stock_KD_Value(name, t)
+        print(f"Currenly price: {yf.Ticker(f'{name}.TW').history(period='1d')['Close'][0]:.2f}")
         name = input('Input code name: ')
 elif type == '1':
-    # Good Stokes 100
+    # Good Stocks 100
     Buy = []
     Sale = []
     g = 0
     t = 1
-    with open('Good stokes.csv', newline='') as csvfile:
+    with open('Good stocks.csv', newline='') as csvfile:
         rows = csv.reader(csvfile)
         for row in rows:
             name = row[0]
-            g = Stoke_KD_Value(name, t)
+            g = Stock_KD_Value(name, t)
             if g == 1:
                 Buy.append(name)
             elif g == 2:
@@ -81,6 +81,9 @@ elif type == '1':
     print('Sale:', Sale)
 else:
     print('Wrong input')
+
+
+
 
 
 
