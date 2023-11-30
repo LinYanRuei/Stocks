@@ -1,8 +1,8 @@
 """
 Stock Finder
-Author Lin Yan Ruei @ CCU PHY, Taiwan
+Author Lin Yan Ruei @ NTU PHY, Taiwan
 """
-# To use this program, you must have good stoke.csv.
+# To use this program, you must have good stocks.csv.
 import yfinance as yf
 import numpy as np
 import pandas as pd
@@ -10,8 +10,11 @@ import matplotlib.pyplot as plt
 import csv
 
 
-def Stock_KD_Value(name, t):
-    df = yf.Ticker(f'{name}.TW').history(period='max')
+def Stock_KD_Value(name, t, nation):
+    if nation == '1':
+        df = yf.Ticker(f'{name}').history(period='max')
+    elif nation == '0':
+        df = yf.Ticker(f'{name}.TW').history(period='max')
     k = []
     d = []
     min_temp = []
@@ -40,7 +43,13 @@ def Stock_KD_Value(name, t):
             max_temp.pop(0)
     if t == 0:
         print('k = ', k_temp, 'd = ', d_temp)
-    if t == 1 and 20 > k_temp and k_temp > d_temp:
+        x = np.linspace(1,90,90)
+        plt.plot(x,k[(len(k)-90):],label = 'k value')
+        plt.plot(x,d[(len(k)-90):],label = 'd value')
+        plt.legend(loc = 'upper right')
+        plt.title(f'{name}')
+        plt.show()
+    if t == 1 and 30 > k_temp and k_temp > d_temp:
         # print(f'Buy {name}, \n')
         m = 1
         return m
@@ -50,37 +59,49 @@ def Stock_KD_Value(name, t):
         return m
 
 
-type = input(
-    'Input which type you want to use, 0 for search in yourself, 1 for good stocks 100. ')
-if type == '0':
-    # 自行查找用
+
+nation = input('Welcome to this stocks selector. 0 for Taiwan companies, 1 for US companies ')
+if nation == '1':
     print('Type "end" or 0000 to end the program.')
-    name = input('Input name: ')  # e.g. 2330 for TSMC
+    name = input('Input name: ')  # e.g. TSLA for TESLA
     while name != 'end' and name != '0000':
         t = 0
-        Stock_KD_Value(name, t)
-        print(f"Currenly price: {yf.Ticker(f'{name}.TW').history(period='1d')['Close'][0]:.2f}")
+        print(f"Currenly price: {yf.Ticker(f'{name}').history(period='1d')['Close'][0]:.2f}")
+        Stock_KD_Value(name, t,nation)
         name = input('Input code name: ')
-elif type == '1':
-    # Good Stocks 100
-    Buy = []
-    Sale = []
-    g = 0
-    t = 1
-    with open('Good stocks.csv', newline='') as csvfile:
-        rows = csv.reader(csvfile)
-        for row in rows:
-            name = row[0]
-            g = Stock_KD_Value(name, t)
-            if g == 1:
-                Buy.append(name)
-            elif g == 2:
-                Sale.append(name)
-
-    print('Buy:', Buy)
-    print('Sale:', Sale)
 else:
-    print('Wrong input')
+    nation = '0'
+    type = input('Input which type of searching method you want to use,\n 0 for search in yourself,\n 1 for good stocks 100. ')
+    if type == '0':
+        # 自行查找用
+        print('Type "end" or 0000 to end the program.')
+        name = input('Input name: ')  # e.g. 2330 for TSMC
+        while name != 'end' and name != '0000':
+            t = 0
+            print(f"Currenly price: {yf.Ticker(f'{name}.TW').history(period='1d')['Close'][0]:.2f}")
+            Stock_KD_Value(name, t, nation)
+            name = input('Input code name: ')
+    elif type == '1':
+        # Good Stocks 100
+        Buy = []
+        Sale = []
+        g = 0
+        t = 1
+        with open('Good stocks.csv', newline='') as csvfile:
+            rows = csv.reader(csvfile)
+            for row in rows:
+                name = row[0]
+                g = Stock_KD_Value(name, t, nation)
+                if g == 1:
+                    Buy.append(name)
+                elif g == 2:
+                    Sale.append(name)
+
+        print('Buy:', Buy)
+        print('Sale:', Sale)
+    else:
+        print('Wrong input')
+
 
 
 
